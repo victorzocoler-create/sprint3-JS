@@ -2,8 +2,6 @@ import { useState } from 'react'
 import SectionTitle from './SectionTitle'
 import { POWERS as ALL_POWERS } from './gameData'
 
-// ─── Animações de efeito ─────────────────────────────────────────────────────
-
 function Tears() {
   return (
     <g>
@@ -46,14 +44,12 @@ function ZZZ() {
   )
 }
 
-// ─── Pet SVG ─────────────────────────────────────────────────────────────────
-
-function PetSVG({ mood, hunger, hygiene, happiness, energy }) {
+function PetSVG({ mood, hunger, hygiene, happiness, energy, bodyColor = '#4FACDE' }) {
   const colors = {
-    happy:   { body: '#4FACDE', belly: '#A8DAEF', cheek: '#FF8FAB' },
-    neutral: { body: '#5BB8E8', belly: '#B0DFF5', cheek: '#FFB3C6' },
-    sad:     { body: '#7EAEC7', belly: '#C2D9E8', cheek: '#C9B8C5' },
-    sick:    { body: '#96B89A', belly: '#C8DDCA', cheek: '#B8C9B0' },
+    happy:   { body: bodyColor,         belly: bodyColor + '99', cheek: '#FF8FAB' },
+    neutral: { body: bodyColor,         belly: bodyColor + '88', cheek: '#FFB3C6' },
+    sad:     { body: bodyColor + 'BB',  belly: bodyColor + '66', cheek: '#C9B8C5' },
+    sick:    { body: '#96B89A',         belly: '#C8DDCA',        cheek: '#B8C9B0' },
   }
   const c = colors[mood] || colors.neutral
 
@@ -140,8 +136,6 @@ function PetSVG({ mood, hunger, hygiene, happiness, energy }) {
   )
 }
 
-// ─── Barra de stat ───────────────────────────────────────────────────────────
-
 function StatBar({ label, value, color, icon }) {
   const pct   = Math.round(value)
   const isLow = pct <= 30
@@ -176,20 +170,16 @@ function StatBar({ label, value, color, icon }) {
   )
 }
 
-// ─── Ações de cuidado ────────────────────────────────────────────────────────
-
 const ACTIONS = [
-  { id: 'feed',    label: 'Alimentar', stat: 'hunger',    boost: 30, cost: 50,  icon: '🍎', desc: '+30 Fome',     color: '#EF4444', bg: '#FEF2F2' },
+  { id: 'feed',    label: 'Alimentar', stat: 'hunger',    boost: 30, cost: 50,  icon: '🍎', desc: '+30 Fome',    color: '#EF4444', bg: '#FEF2F2' },
   { id: 'bath',    label: 'Dar Banho', stat: 'hygiene',   boost: 35, cost: 60,  icon: '🛁', desc: '+35 Higiene', color: '#0EA5E9', bg: '#E0F4FD' },
-  { id: 'play',    label: 'Brincar',   stat: 'happiness', boost: 25, cost: 40,  icon: '🎾', desc: '+25 Alegria',  color: '#F5A623', bg: '#FEF6E7' },
+  { id: 'play',    label: 'Brincar',   stat: 'happiness', boost: 25, cost: 40,  icon: '🎾', desc: '+25 Alegria', color: '#F5A623', bg: '#FEF6E7' },
   { id: 'sleep',   label: 'Dormir',    stat: 'energy',    boost: 40, cost: 30,  icon: '💤', desc: '+40 Energia', color: '#7C3AED', bg: '#F3F0FF' },
-  { id: 'treat',   label: 'Petisco',   stat: 'happiness', boost: 40, cost: 80,  icon: '🍬', desc: '+40 Alegria',  color: '#EC4899', bg: '#FDF2F8' },
-  { id: 'vitamin', label: 'Vitamina',  stat: 'hunger',    boost: 50, cost: 120, icon: '💊', desc: '+50 Fome',     color: '#28A745', bg: '#EAF6ED' },
+  { id: 'treat',   label: 'Petisco',   stat: 'happiness', boost: 40, cost: 80,  icon: '🍬', desc: '+40 Alegria', color: '#EC4899', bg: '#FDF2F8' },
+  { id: 'vitamin', label: 'Vitamina',  stat: 'hunger',    boost: 50, cost: 120, icon: '💊', desc: '+50 Fome',    color: '#28A745', bg: '#EAF6ED' },
 ]
 
-// ─── Componente principal ────────────────────────────────────────────────────
-
-export default function PetPage({ pet, ps, carePet, unlockedPowers = [] }) {
+export default function PetPage({ pet, ps, carePet, unlockedPowers = [], petName, petColor }) {
   const [confirmAction, setConfirmAction] = useState(null)
 
   const avg  = (pet.hunger + pet.hygiene + pet.happiness + pet.energy) / 4
@@ -220,7 +210,9 @@ export default function PetPage({ pet, ps, carePet, unlockedPowers = [] }) {
       {/* Header */}
       <div style={{ padding: '20px 20px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
-          <h1 style={{ fontSize: 22, fontWeight: 900, color: '#1A2B3C' }}>{pet.name}</h1>
+          <h1 style={{ fontSize: 22, fontWeight: 900, color: '#1A2B3C' }}>
+            {petName || pet.name || 'Bolinha'}
+          </h1>
           <p style={{ fontSize: 13, color: '#6B7E91', marginTop: 2 }}>Seu companheiro de saúde</p>
         </div>
         <div style={{ textAlign: 'right' }}>
@@ -247,6 +239,7 @@ export default function PetPage({ pet, ps, carePet, unlockedPowers = [] }) {
           hygiene={pet.hygiene}
           happiness={pet.happiness}
           energy={pet.energy}
+          bodyColor={petColor || '#4FACDE'}
         />
         <div style={{ marginTop: 4, fontSize: 13, fontWeight: 700, color: mood === 'happy' ? '#28A745' : mood === 'sad' || mood === 'sick' ? '#EF4444' : '#F5A623' }}>
           {moodLabel[mood]}

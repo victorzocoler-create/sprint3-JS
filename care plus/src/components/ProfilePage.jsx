@@ -227,8 +227,35 @@ export default function ProfilePage({ state, showToast, logout, userName, petNam
         ))}
       </div>
 
-      {/* Botão logout */}
-      <div style={{ padding: '0 16px 32px' }}>
+      {/* Botões de ação */}
+      <div style={{ padding: '0 16px 32px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <button
+          onClick={() => {
+            const loggedUser = JSON.parse(localStorage.getItem('cp_logged') || '{}')
+            const novoNome = prompt('Digite seu novo nome:', loggedUser.name)
+            if (novoNome && novoNome.trim()) {
+              const updated = { ...loggedUser, name: novoNome.trim() }
+              localStorage.setItem('cp_logged', JSON.stringify(updated))
+              const users = JSON.parse(localStorage.getItem('cp_users') || '[]')
+              const idx   = users.findIndex(u => u.email === updated.email)
+              if (idx !== -1) { users[idx] = updated; localStorage.setItem('cp_users', JSON.stringify(users)) }
+              window.location.reload()
+            }
+          }}
+          style={{
+            width: '100%', padding: '13px',
+            borderRadius: 12,
+            border: '1.5px solid #1B6DB840',
+            background: '#EBF3FB',
+            color: '#1B6DB8',
+            fontSize: 14, fontWeight: 700,
+            cursor: 'pointer',
+            transition: 'opacity 0.2s',
+          }}
+        >
+          ✏️ Editar nome
+        </button>
+
         <button
           onClick={logout}
           style={{
@@ -242,7 +269,7 @@ export default function ProfilePage({ state, showToast, logout, userName, petNam
             transition: 'opacity 0.2s',
           }}
         >
-          Sair da conta
+          🚪 Sair da conta
         </button>
       </div>
 

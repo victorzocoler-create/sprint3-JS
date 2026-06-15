@@ -70,6 +70,8 @@ export default function App() {
             ps={state.ps}
             carePet={carePet}
             unlockedPowers={unlockedPowers}
+            petName={loggedUser.petName}
+            petColor={loggedUser.petColor}
           />
         )}
         {activeTab === 'profile' && (
