@@ -71,4 +71,4 @@ O hook `src/data/useDB.js` demonstra o consumo via `fetch`.
 
 ## Deploy
 
-Projeto publicado em: https://SEU-LINK.vercel.app
+Projeto publicado em: https://sprint3-js.vercel.app
